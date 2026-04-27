@@ -1,3 +1,18 @@
+---
+title: Traffic Monitoring System
+emoji: 🚦
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_file: app.py
+pinned: false
+---
+
+# 🚦 Traffic Monitoring System
+
+<div align="center">
+...
+
 # 🚦 Traffic Monitoring System
 
 <div align="center">
