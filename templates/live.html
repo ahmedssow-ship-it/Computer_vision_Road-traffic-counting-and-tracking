@@ -1,0 +1,41 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="live-container">
+
+  <!-- Stream vidéo -->
+  <div class="video-section">
+    <div class="video-wrapper">
+      <img id="video-stream" src="/video_feed" alt="Stream vidéo">
+      <div id="no-object-banner" class="hidden">
+        ⚠️ Aucun objet détecté dans la scène
+      </div>
+    </div>
+    <button id="stop-btn" class="btn-danger">⏹ Arrêter</button>
+  </div>
+
+  <!-- Panneau de stats -->
+  <div class="stats-panel">
+    <h3>📊 Compteurs en temps réel</h3>
+
+    <div class="stat-box">
+      <h4>Actifs (frame courante)</h4>
+      <div id="active-counts"></div>
+    </div>
+
+    <div class="stat-box">
+      <h4>Total objets uniques</h4>
+      <div id="total-counts"></div>
+    </div>
+
+    <div class="stat-box">
+      <h4>Frames traitées</h4>
+      <span id="frame-count">0</span>
+    </div>
+
+    <canvas id="live-chart" height="200"></canvas>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

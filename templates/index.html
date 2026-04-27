@@ -1,0 +1,50 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h1>🚦 Système de surveillance du trafic</h1>
+  <p class="subtitle">Détection et tracking en temps réel avec YOLOv11 + ByteTrack</p>
+
+  <div class="card">
+    <h2>1. Source vidéo</h2>
+
+    <!-- Upload local -->
+    <div class="source-option">
+      <label><input type="radio" name="source" value="upload" checked> Vidéo locale</label>
+      <div id="upload-zone">
+        <input type="file" id="video-file" accept="video/*">
+        <p id="upload-status"></p>
+      </div>
+    </div>
+
+    <!-- URL en ligne -->
+    <div class="source-option">
+      <label><input type="radio" name="source" value="url"> URL en ligne</label>
+      <div id="url-zone">
+        <input type="url" id="video-url" placeholder="https://..." disabled>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. Classes à détecter</h2>
+    <div class="classes-grid">
+      {% for cls in classes %}
+      <label class="class-item">
+        <input type="checkbox" name="class" value="{{ cls }}" checked>
+        {{ cls }}
+      </label>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. Identifiant de scène</h2>
+    <input type="text" id="scene-id" value="scene_01" placeholder="ex: intersection_dakar">
+  </div>
+
+  <button id="start-btn" class="btn-primary">▶ Démarrer la détection</button>
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

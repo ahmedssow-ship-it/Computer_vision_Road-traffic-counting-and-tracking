@@ -1,0 +1,310 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard-container">
+  <div class="dash-header">
+    <h1>📊 Dashboard — Analyse du trafic</h1>
+    <div class="header-actions">
+      <select id="log-selector">
+        <option value="">-- Sélectionner un log --</option>
+        {% for f in log_files %}
+        <option value="{{ f }}">{{ f }}</option>
+        {% endfor %}
+      </select>
+      <button id="load-btn" class="btn-primary">📂 Charger</button>
+      <button id="export-btn" class="btn-secondary">⬇ Exporter CSV</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon">🚶</div>
+      <div class="kpi-info">
+        <span class="kpi-value" id="kpi-persons">—</span>
+        <span class="kpi-label">Personnes uniques</span>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">🚲</div>
+      <div class="kpi-info">
+        <span class="kpi-value" id="kpi-bicycles">—</span>
+        <span class="kpi-label">Vélos uniques</span>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">🚗</div>
+      <div class="kpi-info">
+        <span class="kpi-value" id="kpi-cars">—</span>
+        <span class="kpi-label">Voitures uniques</span>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">🏍️</div>
+      <div class="kpi-info">
+        <span class="kpi-value" id="kpi-motorcycles">—</span>
+        <span class="kpi-label">Motos uniques</span>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">🚌</div>
+      <div class="kpi-info">
+        <span class="kpi-value" id="kpi-bus">—</span>
+        <span class="kpi-label">Bus uniques</span>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">🚚</div>
+      <div class="kpi-info">
+        <span class="kpi-value" id="kpi-trucks">—</span>
+        <span class="kpi-label">Camions uniques</span>
+      </div>
+    </div>
+    <div class="kpi-card highlight">
+      <div class="kpi-icon">📦</div>
+      <div class="kpi-info">
+        <span class="kpi-value" id="kpi-total">—</span>
+        <span class="kpi-label">Total objets uniques</span>
+      </div>
+    </div>
+    <div class="kpi-card highlight">
+      <div class="kpi-icon">🎞️</div>
+      <div class="kpi-info">
+        <span class="kpi-value" id="kpi-frames">—</span>
+        <span class="kpi-label">Frames analysées</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-row">
+    <div class="chart-card">
+      <h3>🥧 Distribution des objets uniques</h3>
+      <div class="chart-wrapper">
+        <canvas id="chart-donut"></canvas>
+      </div>
+    </div>
+    <div class="chart-card wide">
+      <h3>📈 Intensité du trafic (Instantané)</h3>
+      <div class="chart-wrapper">
+        <canvas id="chart-timeline"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <h3>📋 Historique des détections</h3>
+      <div class="table-filters" style="margin-bottom: 10px;">
+        <select id="filter-class">
+          <option value="">Toutes les classes</option>
+          <option value="car">car</option>
+          <option value="bus">bus</option>
+          <option value="truck">truck</option>
+          <option value="motorcycle">motorcycle</option>
+          <option value="bicycle">bicycle</option>
+          <option value="person">person</option>
+        </select>
+        <button id="filter-btn" class="btn-secondary">🔍 Filtrer</button>
+      </div>
+    </div>
+    <div class="table-wrapper">
+      <table id="detections-table">
+        <thead>
+          <tr>
+            <th>Frame</th>
+            <th>Timestamp</th>
+            <th>Track ID</th>
+            <th>Classe</th>
+            <th>Confiance</th>
+            <th>BBox</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr><td colspan="6" style="text-align:center; padding:20px;">Veuillez charger un fichier...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" style="display: flex; justify-content: center; align-items: center; gap: 15px; padding: 15px;">
+      <button id="prev-page" class="btn-page">◀ Précédent</button>
+      <span id="page-info">Page 1 / 1</span>
+      <button id="next-page" class="btn-page">Suivant ▶</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .dashboard-container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; background: #0f111a; color: #e0e0e0; font-family: sans-serif; }
+  .dash-header { display: flex; justify-content: space-between; align-items: center; }
+  .header-actions { display: flex; gap: 10px; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
+  .kpi-card { background: #1a1d27; border: 1px solid #2c3e50; border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 10px; }
+  .kpi-card.highlight { border-color: #3498db; }
+  .kpi-value { font-size: 1.5rem; font-weight: bold; color: #3498db; }
+  .kpi-label { font-size: 0.8rem; color: #888; }
+  .charts-row { display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; }
+  .chart-card { background: #1a1d27; border: 1px solid #2c3e50; border-radius: 10px; padding: 1rem; }
+  .chart-wrapper { height: 250px; position: relative; }
+  .table-card { background: #1a1d27; border-radius: 10px; padding: 1rem; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 12px; border-bottom: 2px solid #3498db; color: #3498db; }
+  td { padding: 10px; border-bottom: 1px solid #2c3e50; }
+  .class-badge { padding: 3px 10px; border-radius: 4px; color: #000; font-weight: bold; font-size: 0.7rem; text-transform: uppercase; }
+  .btn-primary { background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+  .btn-secondary { background: #2c3e50; color: white; border: 1px solid #3498db; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+  .btn-page { background: #2c3e50; color: white; border: 1px solid #3498db; padding: 5px 12px; border-radius: 4px; cursor: pointer; }
+  .btn-page:disabled { opacity: 0.3; cursor: not-allowed; }
+</style>
+
+<script>
+const COLORS = { car: "#3498db", bus: "#e67e22", truck: "#9b59b6", motorcycle: "#e91e8c", bicycle: "#2ecc71", person: "#1abc9c" };
+let allDetections = [], filteredData = [], currentPage = 1, PAGE_SIZE = 15;
+let donutChart = null, timelineChart = null;
+
+// Initialisation sécurisée
+function initCharts() {
+    if (typeof Chart === 'undefined') {
+        console.warn("Chart.js n'est pas encore prêt...");
+        return false;
+    }
+    const ctxDonut = document.getElementById('chart-donut').getContext('2d');
+    donutChart = new Chart(ctxDonut, {
+        type: 'doughnut',
+        data: { labels: [], datasets: [{ data: [], backgroundColor: [] }] },
+        options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#ccc' } } } }
+    });
+
+    const ctxLine = document.getElementById('chart-timeline').getContext('2d');
+    timelineChart = new Chart(ctxLine, {
+        type: 'line',
+        data: { labels: [], datasets: [] },
+        options: { maintainAspectRatio: false, scales: { 
+            y: { beginAtZero: true, grid: { color: '#2c3e50' }, ticks: { color: '#888' } },
+            x: { ticks: { color: '#888' } }
+        } }
+    });
+    return true;
+}
+
+// Fonction de chargement
+async function loadLog() {
+    const filename = document.getElementById("log-selector").value;
+    if (!filename) return;
+
+    const btn = document.getElementById("load-btn");
+    btn.textContent = "⏳...";
+    btn.disabled = true;
+
+    try {
+        const response = await fetch('/logs/' + filename);
+        if (!response.ok) throw new Error("Fichier introuvable.");
+        const data = await response.json();
+        
+        // S'assurer que les graphiques sont créés s'ils ne l'étaient pas
+        if (!donutChart) initCharts();
+        
+        processData(data);
+    } catch (err) {
+        alert(err.message);
+    } finally {
+        btn.textContent = "📂 Charger";
+        btn.disabled = false;
+    }
+}
+
+function processData(data) {
+    allDetections = [];
+    const uniques = { person: new Set(), bicycle: new Set(), car: new Set(), motorcycle: new Set(), bus: new Set(), truck: new Set() };
+    const timeline = {};
+    let maxF = 0;
+
+    data.forEach(f => {
+        maxF = Math.max(maxF, f.frame);
+        timeline[f.frame] = f.detections.length;
+        f.detections.forEach(d => {
+            const c = d.class.toLowerCase();
+            if (uniques[c]) uniques[c].add(d.track_id);
+            allDetections.push({ frame: f.frame, timestamp: f.timestamp, track_id: d.track_id, class: d.class, conf: d.confidence, bbox: d.bbox });
+        });
+    });
+
+    // MAJ KPIs
+    Object.keys(uniques).forEach(k => {
+        const el = document.getElementById(`kpi-${k === 'person' ? 'persons' : (k + 's')}`);
+        if(el) el.textContent = uniques[k].size;
+    });
+    
+    const total = Object.values(uniques).reduce((a, b) => a + b.size, 0);
+    document.getElementById("kpi-total").textContent = total;
+    document.getElementById("kpi-frames").textContent = maxF;
+
+    // MAJ Donut
+    donutChart.data.labels = Object.keys(uniques);
+    donutChart.data.datasets[0].data = Object.values(uniques).map(s => s.size);
+    donutChart.data.datasets[0].backgroundColor = Object.keys(uniques).map(k => COLORS[k]);
+    donutChart.update();
+
+    // MAJ Timeline
+    const fKeys = Object.keys(timeline).sort((a,b) => a-b);
+    timelineChart.data.labels = fKeys.filter((_, i) => i % 10 === 0);
+    timelineChart.data.datasets = [{
+        label: 'Objets actifs',
+        data: fKeys.filter((_, i) => i % 10 === 0).map(k => timeline[k]),
+        borderColor: '#3498db', tension: 0.3, fill: false
+    }];
+    timelineChart.update();
+
+    filteredData = [...allDetections];
+    currentPage = 1;
+    renderTable();
+}
+
+function renderTable() {
+    const tbody = document.getElementById("table-body");
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const slice = filteredData.slice(start, start + PAGE_SIZE);
+    const totalP = Math.ceil(filteredData.length / PAGE_SIZE) || 1;
+
+    document.getElementById("page-info").textContent = `Page ${currentPage} / ${totalP}`;
+    document.getElementById("prev-page").disabled = currentPage === 1;
+    document.getElementById("next-page").disabled = currentPage === totalP;
+
+    tbody.innerHTML = slice.map(d => `
+        <tr>
+            <td>${d.frame}</td>
+            <td>${d.timestamp}</td>
+            <td>#${d.track_id}</td>
+            <td><span class="class-badge" style="background:${COLORS[d.class.toLowerCase()] || '#888'}">${d.class}</span></td>
+            <td>${(d.conf * 100).toFixed(1)}%</td>
+            <td style="font-size:0.7rem">${d.bbox ? d.bbox.join(', ') : '-'}</td>
+        </tr>
+    `).join('');
+}
+
+// Listeners
+document.getElementById("load-btn").addEventListener("click", loadLog);
+document.getElementById("prev-page").addEventListener("click", () => { if(currentPage > 1) { currentPage--; renderTable(); } });
+document.getElementById("next-page").addEventListener("click", () => { if(currentPage < Math.ceil(filteredData.length/PAGE_SIZE)) { currentPage++; renderTable(); } });
+document.getElementById("filter-btn").addEventListener("click", () => {
+    const c = document.getElementById("filter-class").value;
+    filteredData = allDetections.filter(d => !c || d.class.toLowerCase() === c);
+    currentPage = 1;
+    renderTable();
+});
+
+document.getElementById("export-btn").addEventListener("click", () => {
+    if(!filteredData.length) return;
+    const head = "Frame,Timestamp,TrackID,Class,Conf,BBox";
+    const rows = filteredData.map(d => `${d.frame},"${d.timestamp}",${d.track_id},"${d.class}",${(d.conf*100).toFixed(2)},"[${d.bbox.join(';')}]"`).join("");
+    const blob = new Blob(["﻿"+head+rows], {type:"text/csv;charset=utf-8;"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "export_trafic.csv";
+    a.click();
+});
+
+// Lancement au chargement de la fenêtre
+window.addEventListener('load', () => {
+    setTimeout(initCharts, 500); // Petit délai pour laisser base.html charger Chart.js
+});
+</script>
+{% endblock %}

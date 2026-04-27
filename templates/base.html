@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Traffic Monitor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">🚦 Traffic Monitor</div>
+    <div class="nav-links">
+      <a href="/">Accueil</a>
+      <a href="/live">Détection Live</a>
+      <a href="/dashboard">Dashboard</a>
+    </div>
+  </nav>
+  <main>{% block content %}{% endblock %}</main>
+</body>
+</html>
