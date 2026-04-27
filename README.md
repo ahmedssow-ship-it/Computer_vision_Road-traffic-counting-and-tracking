@@ -83,6 +83,7 @@ how traffic evolves across different regions and times of day.
 
 ## 🏗️ Architecture
 
+```bash
 Video (local or URL)
 │
 ▼
@@ -119,6 +120,7 @@ Video (local or URL)
 │  Web Interface│  Flask — annotated video stream
 │               │  + statistical dashboard
 └───────────────┘
+```
 
 ---
 
@@ -157,7 +159,7 @@ pip install -r requirements.txt
 **4. Place the trained model**
 ```bash
 # Copy your fine-tuned model to:
-models/yolo/traffic_yolo11_best.pt
+models/traffic_yolo11_best.pt
 ```
 
 > If you do not have a fine-tuned model, the pre-trained
@@ -170,8 +172,8 @@ python app.py
 
 **6. Open in your browser**
 ```bash
-Running on http://127.0.0.1:5000
-Running on http://192.168.1.41:5000
+http://127.0.0.1:5000
+http://192.168.1.41:5000
 ```
 
 ---
@@ -209,6 +211,7 @@ Running on http://192.168.1.41:5000
 
 ## 📁 Project Structure
 
+```bash
 traffic-monitoring-project/
 │
 ├── 📂 data/
@@ -226,8 +229,6 @@ traffic-monitoring-project/
 │   ├── counter.py           # Unique object counting
 │   ├── logger.py            # Log generation
 │ 
-├── 📂 web_app/
-│   ├── app.py               # Flask application
 │   ├── templates/
 │   │   ├── base.html
 │   │   ├── index.html       # Home page
@@ -236,18 +237,142 @@ traffic-monitoring-project/
 │   └── static/
 │       ├── css/style.css
 │       ├── js/main.js
-│       └── uploads/         # Uploaded videos
 │
-├── 📂 notebooks/
-│   └── fine_tuning.ipynb    # Kaggle training notebook
-│
-├── 📂 results/
-│   ├── videos/              # Annotated output videos
-│   ├── images/              # Screenshots
-│   └── plots/               # Exported charts
-│
-├── 📄 main.py               # Standalone CLI pipeline
+├── 📄 app.py                # Flask application
 ├── 📄 requirements.txt      # Python dependencies
 ├── 📄 README.md             # This file
 ├── 📄 LICENSE               # MIT License
 └── 📄 report.pdf            # Final report
+```
+
+---
+
+## 🤖 Model
+
+### YOLOv11 — Fine-tuning
+
+| Parameter | Value |
+|---|---|
+| Base model | `yolo11n.pt` |
+| Dataset | bdd100k Yolo-Format Dataset / Kaggle |
+| Epochs | 50 |
+| Image size | 640×640 |
+| Batch size | 16 |
+| Learning rate | 0.001 |
+| Platform | Kaggle GPU T4 |
+
+### Performance Metrics
+
+| Metric | Value |
+|---|---|
+| mAP@50 | — |
+| mAP@50-95 | — |
+| Precision | — |
+| Recall | — |
+
+> *Metrics will be updated after final training.*
+
+---
+
+## 🎯 Detected Classes
+
+| ID | Class | Emoji | Priority |
+|---|---|---|---|
+| 0 | person | 🚶 | ⭐⭐⭐ |
+| 1 | bicycle | 🚲 | ⭐ |
+| 2 | car | 🚗 | ⭐⭐⭐ |
+| 3 | motorcycle | 🏍️ | ⭐⭐⭐ |
+| 5 | bus | 🚌 | ⭐⭐ |
+| 7 | truck | 🚛 | ⭐⭐ |
+
+
+---
+
+## 📊 Log Format
+
+### CSV (`logs/detections_*.csv`)
+```bash
+scene_id, frame, timestamp, track_id, class, confidence, x1, y1, x2, y2
+scene_01, 142,  00:04.73,  7,        car,   0.912,      120,340,280,420
+```
+
+### JSON (`logs/tracking_*.json`)
+
+```json
+{
+  "scene_id":  "scene_01",
+  "frame":     142,
+  "timestamp": "00:04.73",
+  "detections": [
+    {
+      "track_id":   7,
+      "class":      "car",
+      "confidence": 0.912,
+      "bbox":       [120, 340, 280, 420]
+    }
+  ]
+}
+```
+
+---
+
+## 📈 Results
+
+### Analyzed Scenes
+
+| Scene | Duration | Source | Detected Objects |
+|---|---|---|---|
+| Scene 01 | — | — | — |
+| Scene 02 | — | — | — |
+
+> *Results will be filled in after testing on the selected videos.*
+
+---
+
+## 🛠️ Dependencies
+
+```bash
+flask>=3.0.0
+ultralytics>=8.3.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+werkzeug>=3.0.0
+PyYAML>=6.0
+```
+
+---
+
+## 👥 Authors
+
+| Name | Email |
+|---|---|
+| Ahmed Souleymane Sow| ahmed.s.sow@aims-senegal.org |
+| Student 2 | email@aims-senegal.org |
+| Student 3 | email@aims-senegal.org |
+
+**Supervisor:** Jordan F. Masakuna — AIMS Senegal
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+See the [LICENSE](LICENSE) file for details.
+```bash
+MIT License — Copyright (c) 2026 — AIMS Senegal
+```
+
+---
+
+## 🙏 Acknowledgements
+
+- [Ultralytics](https://ultralytics.com) for YOLOv11
+- [Kaggle](https://www.kaggle.com/datasets/a7madmostafa/bdd100k-yolo) for the datasets
+- [Pexels](https://pexels.com) for the traffic videos
+- AIMS Senegal for supervision and support
+
+---
+
+<div align="center">
+  <i>Built with ❤️ at AIMS Senegal — Computer Vision 2026</i>
+</div>
