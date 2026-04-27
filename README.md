@@ -13,9 +13,6 @@ pinned: false
 <div align="center">
 ...
 
-# 🚦 Traffic Monitoring System
-
-<div align="center">
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python)
 ![YOLOv11](https://img.shields.io/badge/YOLOv11-Ultralytics-purple?style=for-the-badge)
