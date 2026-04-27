@@ -73,9 +73,9 @@ how traffic evolves across different regions and times of day.
 
 | Page | Description |
 |---|---|
-| `localhost:5000/` | Home — video upload and configuration |
-| `localhost:5000/live` | Real-time detection and tracking |
-| `localhost:5000/dashboard` | Log analysis and visualization |
+| `http://192.168.1.41:5000/` | Home — video upload and configuration |
+| `http://192.168.1.41:5000/live` | Real-time detection and tracking |
+| `http://192.168.1.41:5000/dashboard` | Log analysis and visualization |
 
 > 📸 *Screenshots available in the `results/images/` folder*
 
