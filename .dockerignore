@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# Environnements
+venv/
+.venv/
+env/
+
+# Données lourdes
+data/raw_videos/
+data/processed_videos/
+static/uploads/
+
+# Modèles (chargés depuis HuggingFace Hub)
+*.pt
+*.pth
+*.onnx
+models/
+
+# Résultats
+logs/
+results/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Notebooks
+notebooks/
+
+# Rapport
+report.pdf
