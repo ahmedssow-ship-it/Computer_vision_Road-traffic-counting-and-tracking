@@ -201,7 +201,7 @@ http://192.168.1.41:5000
 | `--video` | Video path or URL | required |
 | `--model` | Path to `.pt` model file | `models/traffic_yolo11_best.pt` |
 | `--classes` | Classes to detect | all |
-| `--conf` | Confidence threshold | `0.3` |
+| `--conf` | Confidence threshold | `0.25` |
 | `--iou` | IoU threshold for NMS | `0.45` |
 | `--scene-id` | Scene identifier | `scene_01` |
 | `--output` | Output folder | `results/` |
