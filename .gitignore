@@ -2,3 +2,5 @@ static/uploads/*.mp4
 static/uploads/*.avi
 static/uploads/*.mov
 static/uploads/*.mkv
+traffic-yolo11/
+traffic-monitoring/
