@@ -266,7 +266,7 @@ traffic-monitoring-project/
 | Parameter | Value |
 |---|---|
 | Base model | `yolo11n.pt` |
-| Dataset | bdd100k Yolo-Format Dataset / Kaggle |
+| Dataset | VisDrone Dataset for Drone / Kaggle |
 | Epochs | 50 |
 | Image size | 640×640 |
 | Batch size | 16 |
@@ -277,10 +277,10 @@ traffic-monitoring-project/
 
 | Metric | Value |
 |---|---|
-| mAP@50 | — |
-| mAP@50-95 | — |
-| Precision | — |
-| Recall | — |
+| mAP@50 | 0.3649  (epoch 50) |
+| mAP@50-95 | 0.2043  (epoch 49) |
+| Precision | 0.5536  (epoch 11)|
+| Recall | 0.3770  (epoch 46) |
 
 > *Metrics will be updated after final training.*
 
