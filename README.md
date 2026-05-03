@@ -360,7 +360,7 @@ PyYAML>=6.0
 |---|---|
 | Ahmed Souleymane Sow| ahmed.s.sow@aims-senegal.org |
 | Munguaganze Bwirachiza Christian | munguaganze.b.christian@aims-senegal.org |
-| Maimouna Ndoye maimouna.ndoye@aims-senegal.org |
+| Maimouna Ndoye | maimouna.ndoye@aims-senegal.org |
 
 **Supervisor:** Jordan F. Masakuna — AIMS Senegal
 
